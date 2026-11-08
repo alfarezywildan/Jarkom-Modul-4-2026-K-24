@@ -862,3 +862,221 @@ Reply from 192.223.8.2: bytes=32 time<1ms TTL=121
 Reply from 192.223.8.2: bytes=32 time<1ms TTL=121
 Packets: Sent = 4, Received = 4, Lost = 0 (0% loss)
 ```
+
+## CIDR
+
+**Alokasi IP Utama (CIDR):** `192.223.0.0/19`
+
+## 1. Pendahuluan & Topologi Jaringan
+
+Pada praktikum Modul 4 ini, dilakukan perancangan ulang arsitektur jaringan *The Wired* berskala besar dengan efisiensi penggunaan alamat IP setinggi mungkin. Seluruh entitas terhubung secara hierarkis ke sebuah hub utama bernama **Wired**, dan hanya **Cyberia** yang terhubung langsung ke jaringan luar (NAT / Cloud).
+
+### Perhitungan Alokasi Subnet Induk
+
+* **Total Kebutuhan IP Host + Router:** 4.188 IP
+
+* **Prefix Induk yang Digunakan:** `/19` (Kapasitas: 8.192 IP)
+
+* **Blok Jaringan Utama:** `192.223.0.0/19`
+
+## 2. Perhitungan Subnetting (CIDR Method)
+
+### A. Tabel Pembagian IP Subnet
+
+Berdasarkan aturan perhitungan praktikum, kebutuhan host ditambahkan dengan jumlah interface router pada subnet tersebut.
+
+| Nama Subnet | Kebutuhan Host | Interface Router | Total IP | Prefix | Netmask | Network Address | Range Usable IP | Broadcast Address | 
+| ----- | ----- | ----- | ----- | ----- | ----- | ----- | ----- | ----- | 
+| **Psyche LAN** | 880 | 1 | 881 | `/22` | `255.255.252.0` | `192.223.0.0` | `192.223.0.1 - 192.223.3.254` | `192.223.3.255` | 
+| **Accela LAN** | 513 | 1 | 514 | `/22` | `255.255.252.0` | `192.223.4.0` | `192.223.4.1 - 192.223.7.254` | `192.223.7.255` | 
+| **Copland LAN 2** | 300 | 1 | 301 | `/23` | `255.255.254.0` | `192.223.8.0` | `192.223.8.1 - 192.223.9.254` | `192.223.9.255` | 
+| **Tachibana LAN** | 266 | 1 | 267 | `/23` | `255.255.254.0` | `192.223.10.0` | `192.223.10.1 - 192.223.11.254` | `192.223.11.255` | 
+| **Navi LAN 1** | 253 | 1 | 254 | `/24` | `255.255.255.0` | `192.223.12.0` | `192.223.12.1 - 192.223.12.254` | `192.223.12.255` | 
+| **Navi LAN 3** | 142 | 1 | 143 | `/24` | `255.255.255.0` | `192.223.13.0` | `192.223.13.1 - 192.223.13.254` | `192.223.13.255` | 
+| **Cyberia LAN** | 125 | 1 | 126 | `/25` | `255.255.255.128` | `192.223.14.0` | `192.223.14.1 - 192.223.14.126` | `192.223.14.127` | 
+| **Deus LAN** | 98 | 1 | 99 | `/25` | `255.255.255.128` | `192.223.14.128` | `192.223.14.129 - 192.223.14.254` | `192.223.14.255` | 
+| **Copland LAN 1** | 31 | 1 | 32 | `/26` | `255.255.255.192` | `192.223.15.0` | `192.223.15.1 - 192.223.15.62` | `192.223.15.63` | 
+| **Navi LAN 2** | 57 | 1 | 58 | `/26` | `255.255.255.192` | `192.223.15.64` | `192.223.15.65 - 192.223.15.126` | `192.223.15.127` | 
+| **Protocol7 LAN** | 32 | 1 | 33 | `/26` | `255.255.255.192` | `192.223.15.128` | `192.223.15.129 - 192.223.15.190` | `192.223.15.191` | 
+| **Shibuya LAN** | 61 | 1 | 62 | `/26` | `255.255.255.192` | `192.223.15.192` | `192.223.15.193 - 192.223.15.254` | `192.223.15.255` | 
+| **Phantoma LAN** | 14 | 1 | 15 | `/27` | `255.255.255.224` | `192.223.16.0` | `192.223.16.1 - 192.223.16.30` | `192.223.16.31` | 
+| **Schumann LAN** | 3 | 1 | 4 | `/29` | `255.255.255.248` | `192.223.16.32` | `192.223.16.33 - 192.223.16.38` | `192.223.16.39` | 
+| **Knights LAN** | 2 | 1 | 3 | `/29` | `255.255.255.248` | `192.223.16.40` | `192.223.16.41 - 192.223.16.46` | `192.223.16.47` | 
+| **Switch2 Transit** | \- | 4 | 4 | `/29` | `255.255.255.248` | `192.223.16.48` | `192.223.16.49 - 192.223.16.54` | `192.223.16.55` | 
+| **Cyberia-Wired** | \- | 2 | 2 | `/30` | `255.255.255.252` | `192.223.16.56` | `192.223.16.57 - 192.223.16.58` | `192.223.16.59` | 
+| **Wired-Navi** | \- | 2 | 2 | `/30` | `255.255.255.252` | `192.223.16.60` | `192.223.16.61 - 192.223.16.62` | `192.223.16.63` | 
+| **Wired-Tachibana** | \- | 2 | 2 | `/30` | `255.255.255.252` | `192.223.16.64` | `192.223.16.65 - 192.223.16.66` | `192.223.16.67` | 
+| **Schumann-Accela** | \- | 2 | 2 | `/30` | `255.255.255.252` | `192.223.16.68` | `192.223.16.69 - 192.223.16.70` | `192.223.16.71` | 
+| **Tachibana-Deus** | \- | 2 | 2 | `/30` | `255.255.255.252` | `192.223.16.72` | `192.223.16.73 - 192.223.16.74` | `192.223.16.75` | 
+| **Deus-Protocol7** | \- | 2 | 2 | `/30` | `255.255.255.252` | `192.223.16.76` | `192.223.16.77 - 192.223.16.78` | `192.223.16.79` | 
+| **Protocol7-Knights** | \- | 2 | 2 | `/30` | `255.255.255.252` | `192.223.16.80` | `192.223.16.81 - 192.223.16.82` | `192.223.16.83` | 
+| **Knights-Phantoma** | \- | 2 | 2 | `/30` | `255.255.255.252` | `192.223.16.84` | `192.223.16.85 - 192.223.16.86` | `192.223.16.87` | 
+| **Phantoma-Shibuya** | \- | 2 | 2 | `/30` | `255.255.255.252` | `192.223.16.88` | `192.223.16.89 - 192.223.16.90` | `192.223.16.91` | 
+
+### B. Pohon Hirarki CIDR (Subnetting & Supernetting Tree)
+
+Berikut adalah struktur pohon pembagian CIDR dari root utama `192.223.0.0/19` hingga seluruh subnet daun (*leaf nodes*):
+
+```text
+192.223.0.0/19 (Root Main Block - 8192 IPs)
+├── 192.223.0.0/20 (Upper Block - 4096 IPs)
+│   ├── 192.223.0.0/21
+│   │   ├── 192.223.0.0/22 ──────────────────> [LAN] Psyche LAN (881 IPs)
+│   │   └── 192.223.4.0/22 ──────────────────> [LAN] Accela LAN (514 IPs)
+│   └── 192.223.8.0/21
+│       ├── 192.223.8.0/22
+│       │   ├── 192.223.8.0/23 ──────────────> [LAN] Copland LAN 2 (301 IPs)
+│       │   └── 192.223.10.0/23 ─────────────> [LAN] Tachibana LAN (267 IPs)
+│       └── 192.223.12.0/22
+│           ├── 192.223.12.0/23
+│           │   ├── 192.223.12.0/24 ─────────> [LAN] Navi LAN 1 (254 IPs)
+│           │   └── 192.223.13.0/24 ─────────> [LAN] Navi LAN 3 (143 IPs)
+│           └── 192.223.14.0/23
+│               ├── 192.223.14.0/24
+│               │   ├── 192.223.14.0/25 ─────> [LAN] Cyberia LAN (126 IPs)
+│               │   └── 192.223.14.128/25 ───> [LAN] Deus LAN (99 IPs)
+│               └── 192.223.15.0/24
+│                   ├── 192.223.15.0/25
+│                   │   ├── 192.223.15.0/26 ──> [LAN] Copland LAN 1 (32 IPs)
+│                   │   └── 192.223.15.64/26 ─> [LAN] Navi LAN 2 (58 IPs)
+│                   └── 192.223.15.128/25
+│                       ├── 192.223.15.128/26 > [LAN] Protocol7 LAN (33 IPs)
+│                       └── 192.223.15.192/26 > [LAN] Shibuya LAN (62 IPs)
+└── 192.223.16.0/20 (Lower Block - 4096 IPs)
+    └── 192.223.16.0/21
+        └── 192.223.16.0/22
+            └── 192.223.16.0/23
+                └── 192.223.16.0/24
+                    ├── 192.223.16.0/25
+                    │   ├── 192.223.16.0/26
+                    │   │   ├── 192.223.16.0/27 ──────> [LAN] Phantoma LAN (15 IPs)
+                    │   │   └── 192.223.16.32/27
+                    │   │       ├── 192.223.16.32/28
+                    │   │       │   ├── 192.223.16.32/29 ──> [LAN] Schumann LAN (4 IPs)
+                    │   │       │   └── 192.223.16.40/29 ──> [LAN] Knights LAN (3 IPs)
+                    │   │       └── 192.223.16.48/28
+                    │   │           ├── 192.223.16.48/29 ──> [Transit] Switch2 Transit (4 IPs)
+                    │   │           └── 192.223.16.56/29
+                    │   │               ├── 192.223.16.56/30 ─> [P2P] Cyberia - Wired
+                    │   │               └── 192.223.16.60/30 ─> [P2P] Wired - Navi
+                    │   └── 192.223.16.64/26
+                    │       ├── 192.223.16.64/27
+                    │       │   ├── 192.223.16.64/28
+                    │       │   │   ├── 192.223.16.64/29
+                    │       │   │   │   ├── 192.223.16.64/30 > [P2P] Wired - Tachibana
+                    │       │   │   │   └── 192.223.16.68/30 > [P2P] Schumann - Accela
+                    │       │   │   └── 192.223.16.72/29
+                    │       │   │       ├── 192.223.16.72/30 > [P2P] Tachibana - Deus
+                    │       │   │       └── 192.223.16.76/30 > [P2P] Deus - Protocol7
+                    │       │   └── 192.223.16.80/28
+                    │       │       ├── 192.223.16.80/29
+                    │       │       │   ├── 192.223.16.80/30 > [P2P] Protocol7 - Knights
+                    │       │       │   └── 192.223.16.84/30 > [P2P] Knights - Phantoma
+                    │       │       └── 192.223.16.88/29
+                    │       │           └── 192.223.16.88/30 > [P2P] Phantoma - Shibuya
+                    │       └── [Sisa Cadangan 192.223.16.92/26]
+                    └── [Sisa Cadangan Unallocated 192.223.16.128/25 s/d 192.223.31.255/20]
+```
+
+![alt](assets/tree_cidr.jpg)
+
+## 3. Implementation & Scripting (`/root/script.sh`)
+
+seluruh konfigurasi antarmuka dan routing diletakkan di dalam file `/root/script.sh` pada setiap node router.
+
+### A. Script Router Cyberia (`/root/script.sh`)
+
+```
+#!/bin/bash
+
+# Konfigurasi IP Interface
+ip addr add 192.223.14.1/25 dev eth1
+ip addr add 192.223.16.57/30 dev eth2
+ip link set eth1 up
+ip link set eth2 up
+
+# Dynamic Routing ke NAT (eth0 DHCP)
+udhcpc -i eth0
+
+# Routing Statis ke Seluruh Subnet Internal melalui Router Wired
+ip route add 192.223.0.0/19 via 192.223.16.58
+
+```
+
+
+### B. Script Router Wired (`/root/script.sh`)
+
+```
+#!/bin/bash
+
+# Konfigurasi Interface
+ip addr add 192.223.16.58/30 dev eth0
+ip addr add 192.223.16.61/30 dev eth1
+ip addr add 192.223.16.49/29 dev eth2
+ip addr add 192.223.16.65/30 dev eth3
+ip link set eth0 up
+ip link set eth1 up
+ip link set eth2 up
+ip link set eth3 up
+
+# Default Route ke Internet via Cyberia
+ip route add default via 192.223.16.57
+
+# Static Route ke Cabang Kiri (Switch2)
+ip route add 192.223.0.0/22 via 192.223.16.50
+ip route add 192.223.8.0/23 via 192.223.16.51
+ip route add 192.223.15.0/26 via 192.223.16.51
+ip route add 192.223.16.32/29 via 192.223.16.52
+ip route add 192.223.4.0/22 via 192.223.16.52
+ip route add 192.223.16.68/30 via 192.223.16.52
+
+# Static Route ke Cabang Navi
+ip route add 192.223.12.0/24 via 192.223.16.62
+ip route add 192.223.13.0/24 via 192.223.16.62
+ip route add 192.223.15.64/26 via 192.223.16.62
+
+# Static Route ke Jalur Tachibana
+ip route add 192.223.10.0/23 via 192.223.16.66
+ip route add 192.223.14.128/25 via 192.223.16.66
+ip route add 192.223.15.128/26 via 192.223.16.66
+ip route add 192.223.16.40/29 via 192.223.16.66
+ip route add 192.223.16.0/27 via 192.223.16.66
+ip route add 192.223.15.192/26 via 192.223.16.66
+ip route add 192.223.16.72/30 via 192.223.16.66
+ip route add 192.223.16.76/30 via 192.223.16.66
+ip route add 192.223.16.80/30 via 192.223.16.66
+ip route add 192.223.16.84/30 via 192.223.16.66
+ip route add 192.223.16.88/30 via 192.223.16.66
+
+```
+
+## 4. Pengujian Konektivitas (Testing & Verification)
+
+### A. Testing Ping Antar Node Internal (End-to-End)
+
+Dilakukan pengujian ping dari node paling luar ke node terdalam (Lain di Shibuya LAN).
+
+1. **Ping dari PC Karl (Psyche LAN) ke PC Lin (Psyche LAN):**
+   ![alt](assets/client%20to%20client.png)
+
+2. **Ping dari PC Karl (Psyche LAN) ke PC Masayuki (Copland LAN):**
+   ![alt](assets/client%20to%20client.png)
+
+3. **Ping dari Router Cyberia ke Router Wired:**
+   ![alt](assets/router%20to%20router.png)
+
+4. **Ping dari Router Cyberia ke PC Karl (Psyche LAN)**
+   ![alt](assets/router%20to%20client.png)
+
+### B. Testing Koneksi Internet via NAT / Cloud
+
+Dilakukan pengujian ping dari router Cyberia dan PC internal ke alamat publik / domain luar.
+
+1. **Ping Google DNS (8.8.8.8) dari Router Cyberia:**
+   ![alt](assets/ping%208.8.8.8.png)
+
+## 5. Kesimpulan
+
+1. Metode subnetting CIDR berhasil membagi alokasi IP `192.223.0.0/19` secara efisien tanpa terjadi bentrok (*IP Overlap*) pada 25 subnet yang ada.
+
+2. Penggunaan kombinasi *Default Route* ke arah Cyberia dan *Static Route* ke arah cabang internal berhasil menghubungkan seluruh entitas jaringan *The Wired* dari ujung ke ujung (End-to-End reachability).
