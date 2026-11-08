@@ -879,6 +879,8 @@ Pada praktikum Modul 4 ini, dilakukan perancangan ulang arsitektur jaringan *The
 
 * **Blok Jaringan Utama:** `192.223.0.0/19`
 
+![alt](assets/topologi_gns.png)
+
 ## 2. Perhitungan Subnetting (CIDR Method)
 
 ### A. Tabel Pembagian IP Subnet
